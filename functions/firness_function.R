@@ -1,5 +1,21 @@
 # Auxiliary functions to be passed to the GA function -----------------------
 
+# Train/testing split
+get_train_test_partition <- function(feature, target, training_size = 0.8){
+  
+  index <- sample(nrow(target), 
+                  replace = FALSE, 
+                  size = round(nrow(target) * training_size))
+  
+  training <- feature[index,] %>%
+    bind_cols(target[index,])
+  
+  test <- features_used[-index,] %>%
+    bind_cols(target[-index,])
+  
+  return(list(training = training, test = test))
+}
+
 # Fitness score 
 fitness_score <- function(vars, features, target, sampling_prob = NA, metrics = 'ROC'){
   
@@ -14,11 +30,7 @@ fitness_score <- function(vars, features, target, sampling_prob = NA, metrics = 
   features_used <- features[, names]
   
   # training and test set using 80/20 split
-  index <- sample(seq(1, nrow(features_used)), replace = FALSE, size = round(nrow(features_used) * 0.8))
-  training <- features_used[index,] %>%
-    bind_cols(target[index,])
-  test <- features_used[-index,] %>%
-    bind_cols(target[-index,])
+  
   
   
   # get the roc value from the created model
@@ -35,19 +47,23 @@ get_performance_metrics <- function(training, test, metrics) {
                                     summaryFunction = twoClassSummary,
                                     classProbs = TRUE)
   
-  mtry <-  sqrt(ncol(data_model))
+  mtry <-  sqrt(ncol(training))
   tunegrid <-  expand.grid(.mtry=round(mtry))
   
   rf_model <-  caret::train(label ~ .,
-                                data = training,
-                                method = "rf",
-                                tuneGrid = tunegrid,
-                                trControl = fitControl,
-                                metric = metrics)
+                            data = training,
+                            method = "rf",
+                            tuneGrid = tunegrid,
+                            trControl = fitControl,
+                            metric = metrics)
   
   predictions <- predict(rf_model, test)
   
-  sum(predictions == test$label) / length(predictions)
+  roc <- rf_model$results[metrics] %>% 
+    pull()
+  accuracy <- sum(predictions == test$label) / length(predictions)
+  
+  return(roc)
 }
 
 custom_fitness <- function(vars, data_x, data_y, p_sampling){

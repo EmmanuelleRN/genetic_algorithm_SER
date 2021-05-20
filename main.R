@@ -46,10 +46,10 @@ toc()
 summary(ga_GA_1)
 
 # Following line will return the variable names of the final and best solution
-best_vars_ga=col_names[ga_GA_1@solution[1,]==1]
+best_vars_ga <- col_names[ga_GA_1@solution[1,]==1]
 
 # Checking the variables of the best solution...
 best_vars_ga
 
 # Checking the accuracy
-get_accuracy_metric(data_tr_sample = cancer_features, target = cancer_label, best_vars_ga)
+get_performance_metrics(cancer_features, target = cancer_label, best_vars_ga)
