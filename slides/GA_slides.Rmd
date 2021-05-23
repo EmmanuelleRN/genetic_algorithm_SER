@@ -1,6 +1,8 @@
 ---
 title: "Genetic Algorithms"
 author: "Emmanuelle R Nunes"
+institute: "International Seminar on Statistics with R"  
+date: "June 2021"
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
