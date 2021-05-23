@@ -4,7 +4,7 @@
 fitness_score <- function(vars, features, target, sampling_prob = NA, metrics = 'ROC'){
   
   if(!is.na(sampling_prob)){
-    sample_index <- funModeling::get_sample(features, percentage_tr_rows = sampling_prob)
+    sample_index <- sample(nrow(target), replace = FALSE, size = round(nrow(target) * sampling_prob))
     features <- features[sample_index,]
     target <- target[sample_index,]
   }
@@ -20,15 +20,15 @@ fitness_score <- function(vars, features, target, sampling_prob = NA, metrics = 
   # get the accuracy from the created model
   accuracy <- get_performance_metrics(partitions$training, partitions$test, metrics)
   
-  # the fitness value will be the highest ROC value divided by the number of features used
+  # the fitness value will be the highest accuracy value divided by the number of features used
   accuracy / sum(vars)
 }
 
 get_performance_metrics <- function(training, test, metrics = 'ROC') {
   # Cross-Validation
-  fitControl <- caret::trainControl(#method = "cv", 
-                                    #number = 10, 
-                                    #summaryFunction = twoClassSummary,
+  fitControl <- caret::trainControl(method = "cv",
+                                    number = 10,
+                                    summaryFunction = twoClassSummary,
                                     classProbs = TRUE)
   
   mtry <-  sqrt(ncol(training))

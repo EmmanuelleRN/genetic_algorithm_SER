@@ -2,7 +2,6 @@ library(GA)      # Genetic Algorithms
 library(tictoc)
 library(caret)
 library(randomForest)
-library(funModeling)
 library(dplyr)
 library(janitor)
 
@@ -32,7 +31,7 @@ ga_feature_selection <-  GA::ga(
     fitness_score(vars = vars, 
                   features =  cancer_features, 
                   target = cancer_label, 
-                  sampling_prob = 0.7)
+                  sampling_prob = 0.6)
   },
   # crossover method
   crossover = gabin_uCrossover,
@@ -43,7 +42,7 @@ ga_feature_selection <-  GA::ga(
   # mutation rate
   pmutation = 0.3, 
   # the number of individuals/solutions
-  popSize = 30, 
+  popSize = 50, 
   # total number of variables
   nBits = param_nBits, 
   # variable name
