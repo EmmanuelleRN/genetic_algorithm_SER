@@ -61,7 +61,8 @@ ga_feature_selection <-  GA::ga(
 )
 
 tictoc::toc()
-# Checking the results
+
+# summary of the algorithm
 summary(ga_feature_selection)
 
 # Final and best solution
@@ -70,7 +71,7 @@ best_vars_ga <- col_names[ga_feature_selection@solution[1,] == 1]
 # Checking the variables of the best solution...
 best_vars_ga
 
-# Checking the performance
+# Checking and comparing the performance of the model
 partition <-  get_train_test_partition(cancer_features, cancer_label)
 get_performance_metrics(training = partition$training[c(best_vars_ga, 'label')], 
                         test = partition$test[c(best_vars_ga, 'label')])
