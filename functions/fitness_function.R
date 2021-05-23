@@ -26,9 +26,9 @@ fitness_score <- function(vars, features, target, sampling_prob = NA, metrics = 
 
 get_performance_metrics <- function(training, test, metrics = 'ROC') {
   # Cross-Validation
-  fitControl <- caret::trainControl(method = "cv", 
-                                    number = 10, 
-                                    summaryFunction = twoClassSummary,
+  fitControl <- caret::trainControl(#method = "cv", 
+                                    #number = 10, 
+                                    #summaryFunction = twoClassSummary,
                                     classProbs = TRUE)
   
   mtry <-  sqrt(ncol(training))
@@ -38,7 +38,7 @@ get_performance_metrics <- function(training, test, metrics = 'ROC') {
                             data = training,
                             method = "rf",
                             tuneGrid = tunegrid,
-                            #trControl = fitControl,
+                            trControl = fitControl,
                             metric = metrics)
   
   predictions <- predict(rf_model, test)

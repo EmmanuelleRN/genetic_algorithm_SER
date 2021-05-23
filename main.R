@@ -11,7 +11,7 @@ source('functions/aux_functions.R')
 
 cancer_df <- readr::read_csv(file = 'data/cancer.csv') %>%
   janitor::clean_names() %>%
-  dplyr::mutate(label = as.factor(ifelse(label == 0, 'B', 'M')))
+  dplyr::mutate(label = as.factor(ifelse(label == 1, 'B', 'M')))
 
 cancer_features <- cancer_df %>%
   dplyr::select(-label)
@@ -34,6 +34,8 @@ ga_feature_selection <-  GA::ga(
                   target = cancer_label, 
                   sampling_prob = 0.7)
   },
+  # crossover method
+  crossover = gabin_uCrossover,
   # optimization data type
   type = "binary",
   # best N individuals to pass to next generation
@@ -41,7 +43,7 @@ ga_feature_selection <-  GA::ga(
   # mutation rate
   pmutation = 0.3, 
   # the number of individuals/solutions
-  popSize = 200, 
+  popSize = 30, 
   # total number of variables
   nBits = param_nBits, 
   # variable name
@@ -49,7 +51,7 @@ ga_feature_selection <-  GA::ga(
   # max iterations without improvement (stopping criteria)
   run = 5, 
   # generations
-  maxiter = 50, 
+  maxiter = 20, 
   # plot the results
   monitor = TRUE, 
   # keep the best solution

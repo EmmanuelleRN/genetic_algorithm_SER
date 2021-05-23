@@ -1,7 +1,6 @@
 ---
 title: "Genetic Algorithms"
 author: "Emmanuelle R Nunes"
-date: '`r Sys.Date()`'
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
@@ -9,7 +8,7 @@ output:
       slideNumberFormat: "%current%"
       highlightStyle: github
       highlightLines: true
-      ratio: 16:9
+      ratio: 3:2
       countIncrementalSlides: true
 ---
 
